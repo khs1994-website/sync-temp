@@ -1,0 +1,22 @@
+{
+  "title": "example 中/英文文档",
+  "language": "zh-hans/us-en",
+  "links": {
+    "sidebar": {
+      "Home": "https://docs.khs1994.com"
+    }
+  },
+  "plugins": [
+    "-sharing",
+    "-highlight",
+    "-livereload",
+    "prism"
+  ],
+  "pluginsConfig": {
+    "prism": {
+      "css": [
+        "prismjs/themes/prism-solarizedlight.css"
+      ]
+    }
+  }
+}

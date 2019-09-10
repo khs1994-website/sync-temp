@@ -1,0 +1,49 @@
+on:
+  push:
+    branches:
+      - sync
+  pull_request:
+  schedule:
+    - cron: '0 0 */1 * *'
+
+name: Sync
+
+jobs:
+  Sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+        with:
+          fetch-depth: 2
+      - name: Fetch upstream
+        run: |
+          git clone --depth=1 ${GIT_URL} example
+        env:
+          GIT_URL: https://example
+      - name: Generate SUMMARY
+        env:
+          SRC_FOLDER: example
+          GITBOOK_TITLE: "[example 中/英文文档](https://example)"
+        run: |
+          set -x
+          mkdir -p ${SRC_FOLDER}/.github/workflows
+          cp -a .github/workflows/gitbook.yaml ${SRC_FOLDER}/.github/workflows/
+          cp book.json ${SRC_FOLDER}
+          cd ${SRC_FOLDER}
+          npm init -f
+          npm install gitbook-summary
+          npx book sm -t "${GITBOOK_TITLE}" -i node_modules
+          rm -rf node_modules package.json package-lock.json
+          ls -la
+      - name: Push docs src
+        if: github.event_name == 'push'
+        uses: docker://pcit/pages
+        env:
+          PCIT_EMAIL: khs1994@khs1994.com
+          PCIT_GIT_TOKEN: ${{ secrets.PCIT_GIT_TOKEN }}
+          PCIT_GIT_URL: github.com/${{ github.repository }}
+          PCIT_KEEP_HISTORY: "1"
+          PCIT_LOCAL_DIR: example_floder
+          PCIT_MESSAGE: Sync from user/repo by PCIT ${{ github.sha }}
+          PCIT_TARGET_BRANCH: master
+          PCIT_USERNAME: khs1994
