@@ -9,7 +9,8 @@ on:
 name: Sync
 
 jobs:
-  Sync:
+  sync-from-upstream:
+    name: Sync-From-Upstream
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
@@ -30,13 +31,14 @@ jobs:
           cp -a .github/workflows/gitbook.yaml ${SRC_FOLDER}/.github/workflows/
           cp book.json ${SRC_FOLDER}
           cd ${SRC_FOLDER}
+          mv Example README.md
           npm init -f
           npm install gitbook-summary
           npx book sm -t "${GITBOOK_TITLE}" -i node_modules
           rm -rf node_modules package.json package-lock.json
           ls -la
       - name: Push docs src
-        if: github.event_name == 'push'
+        if: github.event_name == 'push' || github.event_name == 'schedule'
         uses: docker://pcit/pages
         env:
           PCIT_EMAIL: khs1994@khs1994.com
@@ -44,6 +46,6 @@ jobs:
           PCIT_GIT_URL: github.com/${{ github.repository }}
           PCIT_KEEP_HISTORY: "1"
           PCIT_LOCAL_DIR: example_floder
-          PCIT_MESSAGE: Sync from user/repo by PCIT ${{ github.sha }}
+          PCIT_MESSAGE: Sync from exampleUser/exampleRepo by PCIT ${{ github.sha }}
           PCIT_TARGET_BRANCH: master
           PCIT_USERNAME: khs1994
