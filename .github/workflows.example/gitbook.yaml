@@ -25,4 +25,5 @@ jobs:
           GIT_USERNAME: "khs1994"
           GIT_USEREMAIL: "khs1994@khs1994.com"
           GIT_BRANCH: "gh-pages"
+          # 必须使用自己的 token, actions 的 token 不会触发 master 的 actions
           GITHUB_TOKEN: ${{ secrets.PCIT_GIT_TOKEN }}

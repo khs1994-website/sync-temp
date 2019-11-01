@@ -42,6 +42,7 @@ jobs:
         uses: docker://pcit/pages
         env:
           PCIT_EMAIL: khs1994@khs1994.com
+          # 必须使用自己的 token, actions 的 token 不会触发 master 的 actions
           PCIT_GIT_TOKEN: ${{ secrets.PCIT_GIT_TOKEN }}
           PCIT_GIT_URL: github.com/${{ github.repository }}
           PCIT_KEEP_HISTORY: "1"
