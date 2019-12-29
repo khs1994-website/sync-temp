@@ -45,7 +45,7 @@ jobs:
           # 必须使用自己的 token, actions 的 token 不会触发 master 的 actions
           PCIT_GIT_TOKEN: ${{ secrets.PCIT_GIT_TOKEN }}
           PCIT_GIT_URL: github.com/${{ github.repository }}
-          PCIT_KEEP_HISTORY: "1"
+          PCIT_KEEP_HISTORY: "true"
           PCIT_LOCAL_DIR: example_floder
           PCIT_MESSAGE: Sync from exampleUser/exampleRepo by PCIT ${{ github.sha }}
           PCIT_TARGET_BRANCH: master
