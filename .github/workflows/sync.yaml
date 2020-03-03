@@ -18,9 +18,14 @@ jobs:
           fetch-depth: 2
       - name: Fetch upstream
         run: |
+          set -x
           git clone --depth=1 ${GIT_URL} example
+
+          UPSTREAM_COMMIT_SHA=`git -C example log --abbrev-commit --pretty="%h" -1`
+          echo "::set-output name=UPSTREAM_COMMIT_SHA::${UPSTREAM_COMMIT_SHA}"
         env:
           GIT_URL: https://example
+        id: upstream
       - name: Generate SUMMARY
         env:
           SRC_FOLDER: example
@@ -47,6 +52,6 @@ jobs:
           PCIT_GIT_URL: github.com/${{ github.repository }}
           PCIT_KEEP_HISTORY: "true"
           PCIT_LOCAL_DIR: example_floder
-          PCIT_MESSAGE: Sync from exampleUser/exampleRepo by PCIT ${{ github.sha }}
+          PCIT_MESSAGE: Sync from exampleUser/exampleRepo@${{ steps.upstream.outputs.UPSTREAM_COMMIT_SHA }} by PCIT
           PCIT_TARGET_BRANCH: master
           PCIT_USERNAME: khs1994
